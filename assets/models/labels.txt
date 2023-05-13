@@ -1,0 +1,6 @@
+Person
+Cat
+Dog
+Bird
+Laptop
+Book
