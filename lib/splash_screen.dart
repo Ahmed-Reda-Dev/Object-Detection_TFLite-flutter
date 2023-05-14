@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
 
-import 'hoime_screen.dart';
+import 'home_screen.dart';
 
 class MyCustomSplashScreen extends StatefulWidget {
   const MyCustomSplashScreen({super.key});
