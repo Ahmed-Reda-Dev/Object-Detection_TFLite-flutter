@@ -1,4 +1,4 @@
-# neural_project
+# Object Detection
 
 A new Flutter project.
 
