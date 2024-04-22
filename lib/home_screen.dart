@@ -2,8 +2,8 @@ import 'dart:io';
 
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_tflite/flutter_tflite.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:tflite/tflite.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -49,8 +49,8 @@ class _HomeScreenState extends State<HomeScreen> {
   classifyImage(File image) async {
     var output = await Tflite.runModelOnImage(
       path: image.path,
-      numResults: 10,
-      threshold: 0.5,
+      numResults: 6,
+      threshold: 0.05,
       imageMean: 127.5,
       imageStd: 127.5,
     );
@@ -62,8 +62,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   loadModel() async {
     await Tflite.loadModel(
-      model: 'assets/models/model_unquant.tflite',
-      labels: 'assets/models/labels.txt',
+      model: 'assets/models/detect.tflite',
+      labels: 'assets/models/labelmap.txt',
     );
   }
 
@@ -120,18 +120,17 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
               const SizedBox(height: 40),
               _output != null
-                  ? AnimatedTextKit(
-                      repeatForever: true,
-                      animatedTexts: [
-                        TyperAnimatedText(
-                          '${_output![0]['label']} ${(100 * _output![0]['confidence']).toStringAsFixed(0)}% ',
-                          textStyle: const TextStyle(
-                            fontSize: 30,
-                            fontWeight: FontWeight.bold,
-                          ),
-                          speed: const Duration(milliseconds: 120),
-                        ),
-                      ],
+                  ? Column(
+                      children: _output != null
+                          ? _output!.map((res) {
+                              return Text(
+                                "${res["label"]}: ${(100 * res["confidence"]).toStringAsFixed(3)} %",
+                                style: const TextStyle(
+                                  fontSize: 20.0,
+                                ),
+                              );
+                            }).toList()
+                          : [],
                     )
                   : Container(),
               const SizedBox(height: 40),
